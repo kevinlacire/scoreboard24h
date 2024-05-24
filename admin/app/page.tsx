@@ -88,15 +88,6 @@ export default function Scoreboard() {
     }
   }
 
-  try {
-    const dir =fs.readdirSync('./');    
-    console.log(dir);
-    //for (const dirent of dir)
-    //  console.log(dirent.name);
-  } catch (err) {
-    console.error(err);
-  }
-
   return (
     <>
       <div className="container-fluid h-100 diagonal-split-background">
