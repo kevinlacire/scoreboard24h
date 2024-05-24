@@ -1,37 +1,54 @@
 "use client";
 import { useRef } from 'react'
 import {Howl, Howler} from 'howler';
-import countdown from './countdown.min.js'
+import Countdown from 'react-countdown';
 import { useState, useEffect } from "react";
 import { Fireworks } from '@fireworks-js/react'
 import type { FireworksHandlers } from '@fireworks-js/react'
 
-function Timer({ hours, minutes, seconds }) {
-  return <span className="text-center align-middle"><span id='hours'>{hours}</span>:<span id='minutes'>{minutes}</span>:<span id='seconds'>{seconds}</span></span>;
+type ScoreProps = {
+  value: number;
+};
+
+type AddPointsProps = {
+  classes: string;
+  inc: number;
+  onClick: () => void;
 }
 
-function Score({ value }) {
+type FunnyEventsProps = {
+  classes: string;
+  value: string;
+  onClick: () => void;
+}
+
+type CommonProps = {
+  value: string;
+  onClick: () => void;
+}
+
+const Score: React.FC<ScoreProps> = ({ value }) => {
   return <p className="score text-center">{value}</p>;
 }
 
-function AddPoints({ classes, inc, on2ptsClick}) {
-  return <button className={classes} onClick={on2ptsClick}>{inc}pts</button>;
+const AddPoints: React.FC<AddPointsProps> = ({ classes, inc, onClick }) => {
+  return <button className={classes} onClick={onClick}>{inc}pts</button>;
 }
 
-function FunnyEvent({ classes, value, onFunnyEventClick }) {
-  return <button className={classes} onClick={onFunnyEventClick}>{value}</button>;
+const FunnyEvent: React.FC<FunnyEventsProps> = ({ classes, value, onClick }) => {
+  return <button className={classes} onClick={onClick}>{value}</button>;
 }
 
-function StartCountdown({ value, onStartCountdownEventClick }) {
-  return <button className="btn btn-success" onClick={onStartCountdownEventClick}>{value}</button>;
+const StartCountdown: React.FC<CommonProps> = ({ value, onClick }) => {
+  return <button className="btn btn-success" onClick={onClick}>{value}</button>;
 }
 
-function ResetCountdown({ value, onResetCountdownEventClick }) {
-  return <button className="btn btn-warning" onClick={onResetCountdownEventClick}>{value}</button>;
+const ResetCountdown: React.FC<CommonProps> = ({ value, onClick }) => {
+  return <button className="btn btn-warning" onClick={onClick}>{value}</button>;
 }
 
-function MuteUnmute({ value, onMuteUnmuteEventClick }) {
-  return <button className="btn btn-primary" onClick={onMuteUnmuteEventClick}>{value}</button>;
+const MuteUnmute: React.FC<CommonProps> = ({ value, onClick }) => {
+  return <button className="btn btn-primary" onClick={onClick}>{value}</button>;
 }
 
 export default function Scoreboard() {
@@ -42,7 +59,7 @@ export default function Scoreboard() {
   const initialTimerState = {hours: "00", minutes: "00", seconds: "00"};
   const [timer, setTimer] = useState(initialTimerState);
   const [isMuted, setIsMuted] = useState(false);
-  const [timerId, setTimerId] = useState(0);
+  const [timerId, setTimerId] = useState<number | any>(0);
   const [soundIsPlaying, setSoundIsPlaying] = useState(false);
   
   const firework = useRef<FireworksHandlers>(null)
@@ -56,36 +73,8 @@ export default function Scoreboard() {
     firework.current.start();
   }
 
-  function incScore(inc, score, setScore) {
+  function incScore(inc: number, score: number, setScore: any): void {
     setScore(Math.max(0, score + inc));
-  }
-
-  function launchCountdown() {
-    console.log("launch countdown");
-    //console.log(Math.floor(officialLauchDatetime - baseDatetime));
-    setTimerId(countdown(
-      officialEndDatetime,
-      function (ts) {
-        setTimer({
-          hours: ((ts.hours < 10) ? "0" : "") + ts.hours,
-          minutes: ((ts.minutes < 10) ? "0" : "") + ts.minutes,
-          seconds: ((ts.seconds < 10) ? "0" : "") + ts.seconds
-        });
-
-        if (ts.hours == 0 && ts.minutes == 0 && ts.seconds == 0) {
-          window.clearInterval(timerId);
-          //fireworks();
-          console.log("game over");
-        }
-      },
-      countdown.HOURS | countdown.MINUTES | countdown.SECONDS
-    ));
-  }
-
-  function resetCountdown() {
-    console.log("reset countdown");
-    window.clearInterval(timerId);
-    setTimer(initialTimerState);
   }
 
   function toggleSound() {
@@ -97,7 +86,7 @@ export default function Scoreboard() {
     }
   }
 
-  function playSong(song) {
+  function playSong(song: string) {
     console.log(song + '.mp3');
     var sound = new Howl({
       src: [song + '.mp3'],
@@ -114,27 +103,23 @@ export default function Scoreboard() {
     }
   }
 
-  useEffect(() => {
-    launchCountdown();
-  }, []);
-
   return (
     <>
-      <div className="container-fluid h-100">
+      <div className="container-fluid h-100 diagonal-split-background">
         <div className="row time">
-          <Timer hours={timer.hours} minutes={timer.minutes} seconds={timer.seconds} />
+          <Countdown date={officialEndDatetime} daysInHours={true} />
         </div>
         <div className="row h-100">
           <div className="col bk-black">
             <Score value={scoreBlue} />
             <div className="row controls">
               <div className="btn-group" role="group">
-                <AddPoints classes={'btn btn-outline-success'} inc={+2} on2ptsClick={() => { incScore(2, scoreBlue, setScoreBlue) ; playSong('coin-mario') } } />
-                <AddPoints classes={'btn btn-outline-success'} inc={+3} on2ptsClick={() => { incScore(3, scoreBlue, setScoreBlue) ; playSong('coin-mario') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+2} onClick={() => { incScore(2, scoreBlue, setScoreBlue) ; playSong('coin-mario') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+3} onClick={() => { incScore(3, scoreBlue, setScoreBlue) ; playSong('coin-mario') } } />
               </div>
               <div className="btn-group" role="group">
-                <AddPoints classes={'btn btn-outline-danger'} inc={-2} on2ptsClick={() => { incScore(-2, scoreBlue, setScoreBlue) } } />
-                <AddPoints classes={'btn btn-outline-danger'} inc={-3} on2ptsClick={() => { incScore(-3, scoreBlue, setScoreBlue) } } />
+                <AddPoints classes={'btn btn-outline-danger'} inc={-2} onClick={() => { incScore(-2, scoreBlue, setScoreBlue) } } />
+                <AddPoints classes={'btn btn-outline-danger'} inc={-3} onClick={() => { incScore(-3, scoreBlue, setScoreBlue) } } />
               </div>
             </div>
           </div>
@@ -142,25 +127,23 @@ export default function Scoreboard() {
             <Score value={scoreRed} />
             <div className="row controls">
               <div className="btn-group" role="group">
-                <AddPoints classes={'btn btn-outline-success'} inc={+2} on2ptsClick={() => { incScore(2, scoreRed, setScoreRed) ; playSong('coin-mario') } } />
-                <AddPoints classes={'btn btn-outline-success'} inc={+3} on2ptsClick={() => { incScore(3, scoreRed, setScoreRed) ; playSong('coin-mario') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+2} onClick={() => { incScore(2, scoreRed, setScoreRed) ; playSong('coin-mario') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+3} onClick={() => { incScore(3, scoreRed, setScoreRed) ; playSong('coin-mario') } } />
               </div>
               <div className="btn-group" role="group">
-                <AddPoints classes={'btn btn-outline-danger'} inc={-2} on2ptsClick={() => { incScore(-2, scoreRed, setScoreRed) } } />
-                <AddPoints classes={'btn btn-outline-danger'} inc={-3} on2ptsClick={() => { incScore(-3, scoreRed, setScoreRed) } } />
+                <AddPoints classes={'btn btn-outline-danger'} inc={-2} onClick={() => { incScore(-2, scoreRed, setScoreRed) } } />
+                <AddPoints classes={'btn btn-outline-danger'} inc={-3} onClick={() => { incScore(-3, scoreRed, setScoreRed) } } />
               </div>
             </div>            
           </div>
         </div>
         <div className="btn-group" role="group">
-          <FunnyEvent classes={'btn btn-outline-primary'}  value={'airball'} onFunnyEventClick={() => playSong('airball')} />
-          <FunnyEvent classes={'btn btn-outline-primary'}  value={'cross-over'} onFunnyEventClick={() => playSong('cross-over')} />
-          <FunnyEvent classes={'btn btn-outline-primary'}  value={'🇺🇸'} onFunnyEventClick={() => playSong('cross-over')} />
+          <FunnyEvent classes={'btn btn-outline-primary'}  value={'airball'} onClick={() => playSong('airball')} />
+          <FunnyEvent classes={'btn btn-outline-primary'}  value={'cross-over'} onClick={() => playSong('cross-over')} />
+          <FunnyEvent classes={'btn btn-outline-primary'}  value={'🇺🇸'} onClick={() => playSong('cross-over')} />
         </div>
         <div className="btn-group admin-controls">
-          <StartCountdown value="▶️" onStartCountdownEventClick={launchCountdown} />
-          <ResetCountdown value="🔄" onResetCountdownEventClick={resetCountdown} />
-          <MuteUnmute value="🔇" onMuteUnmuteEventClick={toggleSound} />
+          <MuteUnmute value="🔇" onClick={toggleSound} />
         </div>
       </div>
       {/*<Fireworks

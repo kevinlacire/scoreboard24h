@@ -11,6 +11,12 @@
   src: url(./../fonts/7segment.woff);
 }*/
 
+html,body{
+	margin:0;
+	padding:0;
+	height:100%;
+}
+
 .time{
   width: 100%;
   position: absolute;
@@ -43,10 +49,8 @@ body {
 }
 
 .bk-black{
-  background-color: #fcea1a;
   color: black;
-  margin-right: 0;
-  padding-top: 200px;
+  padding-top: 250px;
 }
 
 .bk-black hr{
@@ -62,13 +66,8 @@ body {
 }
 
 .bk-white{
-  background-color: #60d8e8;
   color: black;
-  padding-top: 200px;
-}
-
-.bk-white hr{
-  border: 1px solid black;
+  padding-top: 250px;
 }
 
 #vs{
@@ -90,7 +89,7 @@ body {
 
 .admin-controls{
   position:absolute;
-  top:0;
+  bottom:0;
   right:0;
 }
 
@@ -105,4 +104,9 @@ body {
 .fill { 
   min-height: 100%;
   height: 100%;
+}
+
+.diagonal-split-background{
+  background-color: #fffb00;
+  background-image: -webkit-linear-gradient(-10deg, #f6ff00 50%, #0088ff 50%);
 }
