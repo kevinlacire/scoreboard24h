@@ -1,10 +1,11 @@
 "use client";
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {Howl, Howler} from 'howler';
 import Countdown from 'react-countdown';
-import { useState, useEffect } from "react";
 import { Fireworks } from '@fireworks-js/react'
 import type { FireworksHandlers } from '@fireworks-js/react'
+import PhotoAlbum from "react-photo-album";
+import photos from "./photos";
 
 type ScoreProps = {
   value: number;
@@ -16,13 +17,8 @@ type AddPointsProps = {
   onClick: () => void;
 }
 
-type FunnyEventsProps = {
-  classes: string;
-  value: string;
-  onClick: () => void;
-}
-
 type CommonProps = {
+  classes: string;
   value: string;
   onClick: () => void;
 }
@@ -35,20 +31,12 @@ const AddPoints: React.FC<AddPointsProps> = ({ classes, inc, onClick }) => {
   return <button className={classes} onClick={onClick}>{inc}pts</button>;
 }
 
-const FunnyEvent: React.FC<FunnyEventsProps> = ({ classes, value, onClick }) => {
+const FunnyEvent: React.FC<CommonProps> = ({ classes, value, onClick }) => {
   return <button className={classes} onClick={onClick}>{value}</button>;
 }
 
-const StartCountdown: React.FC<CommonProps> = ({ value, onClick }) => {
-  return <button className="btn btn-success" onClick={onClick}>{value}</button>;
-}
-
-const ResetCountdown: React.FC<CommonProps> = ({ value, onClick }) => {
-  return <button className="btn btn-warning" onClick={onClick}>{value}</button>;
-}
-
-const MuteUnmute: React.FC<CommonProps> = ({ value, onClick }) => {
-  return <button className="btn btn-primary" onClick={onClick}>{value}</button>;
+const MuteUnmute: React.FC<CommonProps> = ({ classes, value, onClick }) => {
+  return <button className={classes} onClick={onClick}>{value}</button>;
 }
 
 export default function Scoreboard() {
@@ -56,10 +44,7 @@ export default function Scoreboard() {
   const [scoreRed, setScoreRed] = useState(0);
   const officialEndDatetime = Date.UTC(2024, 5, 8, 17, 0, 0); // (months 0 based)
 
-  const initialTimerState = {hours: "00", minutes: "00", seconds: "00"};
-  const [timer, setTimer] = useState(initialTimerState);
   const [isMuted, setIsMuted] = useState(false);
-  const [timerId, setTimerId] = useState<number | any>(0);
   const [soundIsPlaying, setSoundIsPlaying] = useState(false);
   
   const firework = useRef<FireworksHandlers>(null)
@@ -103,12 +88,21 @@ export default function Scoreboard() {
     }
   }
 
+  try {
+    const dir =fs.readdirSync('./');    
+    console.log(dir);
+    //for (const dirent of dir)
+    //  console.log(dirent.name);
+  } catch (err) {
+    console.error(err);
+  }
+
   return (
     <>
       <div className="container-fluid h-100 diagonal-split-background">
         <div className="row time">
           <Countdown date={officialEndDatetime} daysInHours={true} />
-        </div>
+        </div>        
         <div className="row h-100">
           <div className="col bk-black">
             <Score value={scoreBlue} />
@@ -134,17 +128,20 @@ export default function Scoreboard() {
                 <AddPoints classes={'btn btn-outline-danger'} inc={-2} onClick={() => { incScore(-2, scoreRed, setScoreRed) } } />
                 <AddPoints classes={'btn btn-outline-danger'} inc={-3} onClick={() => { incScore(-3, scoreRed, setScoreRed) } } />
               </div>
-            </div>            
+            </div>
           </div>
-        </div>
-        <div className="btn-group" role="group">
-          <FunnyEvent classes={'btn btn-outline-primary'}  value={'airball'} onClick={() => playSong('airball')} />
-          <FunnyEvent classes={'btn btn-outline-primary'}  value={'cross-over'} onClick={() => playSong('cross-over')} />
-          <FunnyEvent classes={'btn btn-outline-primary'}  value={'🇺🇸'} onClick={() => playSong('cross-over')} />
-        </div>
-        <div className="btn-group admin-controls">
-          <MuteUnmute value="🔇" onClick={toggleSound} />
-        </div>
+          <div className="row">
+            <PhotoAlbum layout="rows" photos={photos} spacing={5} targetRowHeight={150} />
+          </div>
+          <div className="row controls">
+            <div className="btn-group" role="group">
+              <FunnyEvent classes={'btn btn-outline-primary'} value={'airball'} onClick={() => playSong('airball')} />
+              <FunnyEvent classes={'btn btn-outline-primary'} value={'cross-over'} onClick={() => playSong('cross-over')} />
+              <FunnyEvent classes={'btn btn-outline-primary'} value={'🇺🇸'} onClick={() => playSong('cross-over')} />
+              <MuteUnmute classes={'btn btn-outline-primary'} value="🔇" onClick={toggleSound} />
+            </div>
+          </div>
+        </div>        
       </div>
       {/*<Fireworks
         ref={firework}
