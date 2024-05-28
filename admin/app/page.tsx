@@ -71,7 +71,14 @@ export default function Scoreboard() {
     }
   }
 
-  function playSong(song: string) {
+  function getRandomInt(max: number): number {
+    return Math.floor(Math.random() * max) + 1;
+  }
+
+  function playSong(song: string, random: boolean = false) {    
+    if (random) {
+      song+='-'+getRandomInt(2)
+    }
     console.log(song + '.mp3');
     var sound = new Howl({
       src: [song + '.mp3'],
@@ -83,7 +90,6 @@ export default function Scoreboard() {
       setSoundIsPlaying(true);
       sound.on('end', function(){
         setSoundIsPlaying(false);
-        // TODO play/stop si la musique en paramètre est la même que celle qui est en cours de lecture
       });
     }
   }
@@ -128,7 +134,7 @@ export default function Scoreboard() {
             <div className="btn-group" role="group">
               <FunnyEvent classes={'btn btn-outline-primary'} value={'airball'} onClick={() => playSong('airball')} />
               <FunnyEvent classes={'btn btn-outline-primary'} value={'cross-over'} onClick={() => playSong('cross-over')} />
-              <FunnyEvent classes={'btn btn-outline-primary'} value={'🇺🇸'} onClick={() => playSong('cross-over')} />
+              <FunnyEvent classes={'btn btn-outline-primary'} value={'🇺🇸'} onClick={() => playSong('usa', true)} />
               <MuteUnmute classes={'btn btn-outline-primary'} value="🔇" onClick={toggleSound} />
             </div>
           </div>
