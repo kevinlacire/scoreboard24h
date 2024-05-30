@@ -43,19 +43,20 @@ export default function Scoreboard() {
   const [scoreBlue, setScoreBlue] = useState(0);
   const [scoreRed, setScoreRed] = useState(0);
   const officialEndDatetime = Date.UTC(2024, 5, 8, 17, 0, 0); // (months 0 based)
-
+  //const officialEndDatetime = Date.now() + 3000;
+  
   const [isMuted, setIsMuted] = useState(false);
   const [soundIsPlaying, setSoundIsPlaying] = useState(false);
   
-  const firework = useRef<FireworksHandlers>(null)
+  const ref = useRef<FireworksHandlers>(null)
 
   function fireworks() {
-    console.log("PASS 0");
-    if (!firework.current) return;
-    console.log("PASS 1");
-    if (firework.current.isRunning) return;
-    console.log("PASS 2");
-    firework.current.start();
+    if (!ref.current) return;    
+    if (ref.current.isRunning) {
+      ref.current.stop();
+    } else {
+      ref.current.start();
+    }
   }
 
   function incScore(inc: number, score: number, setScore: any): void {
@@ -98,7 +99,7 @@ export default function Scoreboard() {
     <>
       <div className="container-fluid h-100 diagonal-split-background">
         <div className="row time">
-          <Countdown date={officialEndDatetime} daysInHours={true} />
+          <Countdown date={officialEndDatetime} daysInHours={true} onComplete={fireworks} />
         </div>        
         <div className="row h-100">
           <div className="col bk-black">
@@ -140,9 +141,10 @@ export default function Scoreboard() {
           </div>
         </div>        
       </div>
-      {/*<Fireworks
-        ref={firework}
-        options={{ opacity: 1 }}
+      <Fireworks
+        ref={ref}
+        autostart={false}
+        options={{ opacity: 0.5 }}
         style={{
           top: 0,
           left: 0,
@@ -151,7 +153,7 @@ export default function Scoreboard() {
           position: 'fixed',
           background: 'transparent'
         }}
-      />*/}
+      />
     </>
   );
 }
