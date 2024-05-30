@@ -54,7 +54,11 @@ export default function Scoreboard() {
     if (!ref.current) return;    
     if (ref.current.isRunning) {
       ref.current.stop();
-    } else {
+    } else {      
+      ref.current.updateSize({
+        height: window.outerHeight,
+        width: window.outerWidth
+       });
       ref.current.start();
     }
   }
@@ -148,8 +152,6 @@ export default function Scoreboard() {
         style={{
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
           position: 'fixed',
           background: 'transparent'
         }}
