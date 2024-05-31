@@ -111,8 +111,8 @@ export default function Scoreboard() {
             <Score value={scoreBlue} />
             <div className="row controls">
               <div className="btn-group" role="group">
-                <AddPoints classes={'btn btn-outline-success'} inc={+2} onClick={() => { incScore(2, scoreBlue, setScoreBlue) ; playSong('coin-mario') } } />
-                <AddPoints classes={'btn btn-outline-success'} inc={+3} onClick={() => { incScore(3, scoreBlue, setScoreBlue) ; playSong('coin-mario') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+2} onClick={() => { incScore(2, scoreBlue, setScoreBlue) ; playSong('coin-mario-2pts') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+3} onClick={() => { incScore(3, scoreBlue, setScoreBlue) ; playSong('coin-mario-3pts') } } />
               </div>
               <div className="btn-group" role="group">
                 <AddPoints classes={'btn btn-outline-danger'} inc={-2} onClick={() => { incScore(-2, scoreBlue, setScoreBlue) } } />
@@ -124,8 +124,8 @@ export default function Scoreboard() {
             <Score value={scoreRed} />
             <div className="row controls">
               <div className="btn-group" role="group">
-                <AddPoints classes={'btn btn-outline-success'} inc={+2} onClick={() => { incScore(2, scoreRed, setScoreRed) ; playSong('coin-mario') } } />
-                <AddPoints classes={'btn btn-outline-success'} inc={+3} onClick={() => { incScore(3, scoreRed, setScoreRed) ; playSong('coin-mario') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+2} onClick={() => { incScore(2, scoreRed, setScoreRed) ; playSong('coin-mario-2pts') } } />
+                <AddPoints classes={'btn btn-outline-success'} inc={+3} onClick={() => { incScore(3, scoreRed, setScoreRed) ; playSong('coin-mario-3pts') } } />
               </div>
               <div className="btn-group" role="group">
                 <AddPoints classes={'btn btn-outline-danger'} inc={-2} onClick={() => { incScore(-2, scoreRed, setScoreRed) } } />
@@ -138,10 +138,15 @@ export default function Scoreboard() {
           </div>
           <div className="row controls">
             <div className="btn-group" role="group">
-              <FunnyEvent classes={'btn btn-outline-primary'} value={'airball'} onClick={() => playSong('airball')} />
-              <FunnyEvent classes={'btn btn-outline-primary'} value={'cross-over'} onClick={() => playSong('cross-over')} />
-              <FunnyEvent classes={'btn btn-outline-primary'} value={'🇺🇸'} onClick={() => playSong('usa', true)} />
-              <MuteUnmute classes={'btn btn-outline-primary'} value="🔇" onClick={toggleSound} />
+              <FunnyEvent classes={'btn btn-light'} value={'🙈 airball'} onClick={() => playSong('airball')} />
+              <FunnyEvent classes={'btn btn-light'} value={"🇺🇸 l'américain"} onClick={() => playSong('usa', true)} />
+              <FunnyEvent classes={'btn btn-light'} value={'💥 kaboom'} onClick={() => playSong('kaboom', true)} />
+              <FunnyEvent classes={'btn btn-light'} value={'🙅‍♂️ no good'} onClick={() => playSong('no-good')} />
+              <FunnyEvent classes={'btn btn-light'} value={'🔥 on fire'} onClick={() => playSong('on-fire')} />
+              <FunnyEvent classes={'btn btn-light'} value={'too easy'} onClick={() => playSong('too-easy')} />
+              <FunnyEvent classes={'btn btn-light'} value={'🫨 wild shot'} onClick={() => playSong('wild-shot')} />
+
+              <MuteUnmute classes={'btn btn-light'} value="🔇 mute/unmute" onClick={toggleSound} />
             </div>
           </div>
         </div>        
