@@ -6,6 +6,7 @@ import { Fireworks } from '@fireworks-js/react'
 import type { FireworksHandlers } from '@fireworks-js/react'
 import PhotoAlbum from "react-photo-album";
 import photos from "./photos";
+import { render } from 'react-dom';
 
 type ScoreProps = {
   value: number;
